@@ -63,18 +63,37 @@
 //         });
 //     }
 
+// var models = require('../models');
+
+// exports.view = function(req, res) {
+//     //var data = {data: [req.body.email, req.body.content, req.body.created]};
+//     var data = {Data:["Test"]}
+
+//     function displayMessage(err, res) {
+//             if(err) {
+//                 console.log(err);
+//                 res.send(500);
+//             }
+//         };
+
+//     res.render('index', data);
+// }
+
 var models = require('../models');
 
 exports.view = function(req, res) {
-    //var data = {data: [req.body.email, req.body.content, req.body.created]};
-    var data = {Data:["Test"]}
+    var data = {data: []};
+    var findParams = req.query;
 
-    function displayMessage(err, res) {
-            if(err) {
-                console.log(err);
-                res.send(500);
-            }
-        };
+    var mQuery = models.Message.find();
 
-    res.render('index', data);
-}
+    mQuery.exec(function(err, recs){
+    if (err) {
+      console.log("Error in find " + err);
+      res.send({success: false, data});
+      } 
+    else {
+    data = {data: recs}
+    res.render("index", data);
+    }});
+};

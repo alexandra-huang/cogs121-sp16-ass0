@@ -1,24 +1,23 @@
 var models = require('../models');
 
 exports.send = function(req, res) {
+    console.log(req.body); // help you see what is inside of req.body
     // your solution here
-    var newMessage = new models({
+    console.log(models.Message); 
+    var newMessage = models.Message({
          email: req.body.email,
          content: req.body.content,
-         created: req.body.created
+         created: new Date()
     });
     console.log('newMessage', newMessage);
-    newMessage.save();
-    console.log('newMessage', newMessage);
-    newMessage.save(function(err){
-        console.log('test');
+
+    newMessage.save(afterSaving);
+
+    function afterSaving(err){
         if(err) {
-            console.log('Error:', err);
-            res.send(err);
+            console.log(err); 
+            res.send(500);
         }
-        else{
-            res.redirect('/');
-        }
-        console.log('created');
-    });
+        res.redirect('/');
+    }
 };
